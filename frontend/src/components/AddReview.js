@@ -1,11 +1,35 @@
 import React, { useState } from "react";
 import { addReview } from "../services/api";
 
+const StarRating = ({ rating, onChange }) => {
+    const handleStarClick = (index) => {
+        onChange(index + 1);  // Setting the rating based on the star clicked
+    };
+
+    return (
+        <div>
+            {[...Array(5)].map((_, index) => (
+                <span
+                    key={index}
+                    onClick={() => handleStarClick(index)}
+                    style={{
+                        cursor: "pointer",
+                        color: index < rating ? "gold" : "gray",
+                        fontSize: "24px",
+                    }}
+                >
+                    ★
+                </span>
+            ))}
+        </div>
+    );
+};
+
 const AddReview = () => {
     const [formData, setFormData] = useState({
         bookTitle: "",
         author: "",
-        rating: "",
+        rating: 0,  // Rating is now a number instead of a string
         reviewText: "",
     });
 
@@ -13,10 +37,14 @@ const AddReview = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleRatingChange = (rating) => {
+        setFormData({ ...formData, rating });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         await addReview(formData);
-        setFormData({ bookTitle: "", author: "", rating: "", reviewText: "" });
+        setFormData({ bookTitle: "", author: "", rating: 0, reviewText: "" });
     };
 
     return (
@@ -52,19 +80,8 @@ const AddReview = () => {
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="rating" className="form-label">Rating (1-5)</label>
-                        <input
-                            type="number"
-                            name="rating"
-                            value={formData.rating}
-                            onChange={handleChange}
-                            className="form-control"
-                            id="rating"
-                            placeholder="Rating (1-5)"
-                            required
-                            min="1"
-                            max="5"
-                        />
+                        <label htmlFor="rating" className="form-label">Rating</label>
+                        <StarRating rating={formData.rating} onChange={handleRatingChange} />
                     </div>
 
                     <div className="mb-3">

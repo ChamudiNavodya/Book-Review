@@ -83,3 +83,7 @@ This is a web application designed for users to post book reviews. The backend i
 ## Contributing
 
 Feel free to fork the repository and submit pull requests for improvements. If you find any bugs or have suggestions, please open an issue.
+
+## Design
+
+![alt text](./frontend/src/assets/images/image.png)

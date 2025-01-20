@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchReview, updateReview } from "../services/api";  // Assuming these services are set up
+import StarRating from "./StarRating";  // Import the StarRating component
 
 const EditReview = () => {
     const { id } = useParams();  // Get the review ID from the URL
@@ -8,7 +9,7 @@ const EditReview = () => {
     const [formData, setFormData] = useState({
         bookTitle: "",
         author: "",
-        rating: "",
+        rating: 0,  // Initialize with 0 rating
         reviewText: "",
     });
 
@@ -26,6 +27,10 @@ const EditReview = () => {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleRatingChange = (newRating) => {
+        setFormData({ ...formData, rating: newRating });  // Update rating in formData
     };
 
     const handleSubmit = async (e) => {
@@ -67,19 +72,8 @@ const EditReview = () => {
                 />
             </div>
             <div className="mb-3">
-                <label htmlFor="rating" className="form-label">Rating (1-5)</label>
-                <input
-                    type="number"
-                    name="rating"
-                    value={formData.rating}
-                    onChange={handleChange}
-                    className="form-control"
-                    id="rating"
-                    placeholder="Rating (1-5)"
-                    required
-                    min="1"
-                    max="5"
-                />
+                <label htmlFor="rating" className="form-label">Rating</label>
+                <StarRating rating={formData.rating} onChange={handleRatingChange} /> {/* Add StarRating component */}
             </div>
             <div className="mb-3">
                 <label htmlFor="reviewText" className="form-label">Review</label>
